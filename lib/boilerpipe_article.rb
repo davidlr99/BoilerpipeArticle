@@ -5,13 +5,13 @@ class BoilerpipeArticle
     @html = html
   end
 
-  def run
-    html =  Nokogiri::HTML.parse(@html).to_s
+  def getText(html = @html)
+    html =  Nokogiri::HTML.parse(html).to_s
     html.gsub!(/<!-[\s\S]*?->/, '')
     html.gsub!(/\r?\n|\r/, '')
 
     doc = Nokogiri::HTML(html)
-    badHtmlTags = ['li','ol','ul','head','script','style','a','img']
+    badHtmlTags = ['nav','head','script','style','a','img']
     badHtmlTags.each do |tag|
       doc.search(tag).each do |src|
         src.remove
@@ -19,10 +19,7 @@ class BoilerpipeArticle
     end
 
     html = doc.to_html.to_s
-
     selfClosingTags = ['<area','<base','<br','<col','<command','<embed','<hr','<img','<input','<keygen','<link','<meta','<param','<source','<track','<wbr']
-
-
     time = Time.now.to_f
     depth = 1
     i = 0
@@ -74,7 +71,20 @@ class BoilerpipeArticle
     articlesStats.each do |line,stats|
       text = "#{text} #{stats[0]}" if stats[1] == best
     end
-
     return Nokogiri::HTML.parse(text).text
+  end
+
+  def getOgMetas(html = @html)
+    metas = Hash.new
+    doc = Nokogiri.parse(html)
+    properties = ['title','type','url','description','image','type','updated_time','locale','url','site_name']
+    properties.each do |prop|
+      if doc.at("meta[property=\"og:#{prop}\"]") != nil
+        metas.store(prop,doc.at("meta[property=\"og:#{prop}\"]")['content'])
+      else
+        metas.store(prop,' ')
+      end
+    end
+    return metas
   end
 end
