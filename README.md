@@ -2,7 +2,12 @@
 This gem removes the surplus “clutter” (boilerplate, templates) around 
 the main textual content of a web page (pure Ruby implementation).
 
-##Usage Example 
+##Installation 
+```
+gem install BoilerpipeArticle
+```
+
+###Usage Example 
 
 ```ruby
 require 'boilerpipe_article'
