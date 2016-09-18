@@ -33,3 +33,8 @@ puts microdata
 #### Runtime Dependencies:
 nokogiri = 1.6.8
 mida = 0.3.9
+
+
+###Support 
+
+Check out textracto.com for lastest updates and API
